@@ -1,0 +1,41 @@
+node('master')
+  {
+   def mavenHome = tool name: 'maven3.8.4'
+  stage('1.git clone')
+  {
+  git credentialsId: 'github_credentials', url: 'https://github.com/Fotso-Technologies/maven-web-app'
+  }
+  stage('2mavenBuild')
+  { 
+    sh "${mavenHome}/bin/mvn clean package"
+  }
+  stage('3CodeQualityReport')
+  {
+  sh "${mavenHome}/bin/mvn sonar:sonar"
+  }
+ stage('4.UploadWarNexus')
+        {
+        //sh "${mavenHome}/bin/mvn clean deploy"
+        }
+ stage('5.DeployUATTomcat')
+        {
+deploy adapters: [tomcat9(credentialsId: 'tomcat_credentials', path: '', url: 'http://172.31.23.59:7000/')], contextPath: null, war: 'target/*.war'
+        } 
+  stage('6.EmailNotificationSMPT') {
+ emailext body: '''Hello Team,
+
+Build project
+
+Brice''', subject: 'Project Ebay Black Friday', to: 'Developers'
+}
+  stage('7-Approval') {
+        timeout(time:8, unit: 'HOURS' ) {
+            input message: 'Please verify and appprove'
+}
+}
+  
+  stage('8.DeployPRODUCTIONTomcat')
+        {
+deploy adapters: [tomcat9(credentialsId: 'tomcat_credentials', path: '', url: 'http://172.31.23.59:7000/')], contextPath: null, war: 'target/*.war'
+        } 
+  } 
