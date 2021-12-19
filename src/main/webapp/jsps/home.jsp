@@ -13,7 +13,7 @@
 <h2 align="center"> Welcome to Landmark Technology. 
 	Landmark Technology is a an ideal online training  platform for DevOps and Cloud Engineers. 
 	We offer interview preparations and job assitance.
-	The shout of the King is in our midst. His name is JESUS.  THANK YOU JESUS CHRIST OUR LORD. HE IS OUR SUCCESS ACCESS KEY.N'est ce pas Miiiii. </h2>
+	The shout of the King is in our midst. His name is JESUS.  THANK YOU JESUS CHRIST OUR LORD. HE IS OUR SUCCESS ACCESS KEY. Yess oooo Miiiii. </h2>
 <hr>
 <div style="text-align: center;">
 	<span>
