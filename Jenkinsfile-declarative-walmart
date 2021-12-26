@@ -1,0 +1,51 @@
+//declarative pipeline
+pipeline{
+agent any
+tools {
+    maven "maven3.8.4"
+}
+stages {
+    stage('1.CodeClone'){
+        steps{
+         git credentialsId: 'github_credentials', url: 'https://github.com/Fotso-Technologies/maven-web-app'    
+        }
+    }
+    stage('2.MavenBuild'){
+        steps{
+            sh "mvn clean package"
+        }
+    }
+    stage('3.CodeQuality'){
+        steps{
+            sh "mvn sonar:sonar"
+        }
+    }
+    stage('4.UploadToNexus'){
+        steps{
+            sh "mvn deploy"
+        }
+    }
+    stage('5.Deploy2Tomcat'){
+        steps{
+          deploy adapters: [tomcat9(credentialsId: 'tomcat_credentials', path: '', url: 'http://172.31.23.59:7000/')], contextPath: null, war: 'target/*.war'  
+        }
+    }
+}
+post{
+    always{
+        mail bcc: 'walmart-app@gmail.com', body: '''Build completed
+
+Fotso Technologies''', cc: 'walmart-app@gmail.com', from: '', replyTo: '', subject: 'build done', to: 'walmart-app@gmail.com'
+    }
+    failure{
+        mail bcc: 'walmart-app@gmail.com', body: '''Build completed
+
+Fotso Technologies''', cc: 'walmart-app@gmail.com', from: '', replyTo: '', subject: 'build failed', to: 'walmart-app@gmail.com'
+    }
+    success{
+        mail bcc: 'walmart-app@gmail.com', body: '''Build completed
+
+Fotso Technologies''', cc: 'walmart-app@gmail.com', from: '', replyTo: '', subject: 'build successful', to: 'walmart-app@gmail.com'
+    }
+}
+}
